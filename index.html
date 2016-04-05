@@ -2,14 +2,19 @@
 <html>
 	<head>
 		<title>IPAR</title>
-		<style>
-			body { background-color:black; overflow: hidden; margin: 0; padding:0;}
-		</style>
+		<link rel="stylesheet" type="text/css" href="css/menuStyle.css">
 		<meta charset="utf-8">
-		<script src="https://cdn.rawgit.com/konvajs/konva/0.11.1/konva.min.js"></script>
-		<script src="js/ipar.js"></script>
+		<script type="text/javascript" src="js/lib/zip.js"></script>
+		<script type="text/javascript">zip.workerScriptsPath = "js/lib/";</script>
+		<script type="text/javascript" src="js/menu.js"></script> 
 	</head>
 	<body>
-		<div id="board"></div>
+		<div id="center">
+			<div>
+				<h1>IPAR</h1>
+				<button id="load-button">Load Case</button>
+				<input type="file" id="load-input" accept="application/zip" />
+			</div>
+		</div>
 	</body>
 </html>
