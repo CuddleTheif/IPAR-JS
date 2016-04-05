@@ -15,11 +15,39 @@ body {
 	color: white;
 }
 
-#load-button {
+button {
 	background-color: #15718F;
 	color: white;
 	width: 20vw;
 	height: 5vh;
+	margin: 1vh 0;
+}
+
+.bottom {
+	position: relative;
+	top: 15vh;
 }
 
 #load-input { display: none; }
+
+#left-content {
+	float: left;
+	padding: 1vh 1vw;
+	height: 40vh;
+}
+
+#right-content {
+	float: right;
+	padding: 1vh 1vw;
+	height: 40vh;
+}
+
+#description {
+	background-color: white;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	color: grey;
+	width: 25vw;
+	height: 33vh;
+	padding: 1vh 1vw;
+}
