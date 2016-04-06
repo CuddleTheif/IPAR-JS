@@ -33,6 +33,13 @@ button:disabled {
 	top: 15vh;
 }
 
+#logo {
+	position: fixed;
+	top: 75vh;
+	left: 85vw;
+	width: 10vw;
+}
+
 #load-input { display: none; }
 
 #left-content {
