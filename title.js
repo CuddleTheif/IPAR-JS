@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		// When load input choosen load the file
 		loadInput.addEventListener('change', function(event){
 			
+			// Make sure a ipar file was choosen
+			if(!loadInput.value.endsWith("ipar")){
+				alert("You didn't choose an ipar file! you can only load ipar files!");
+				return;
+			}
+		
 			// Set the button to disabled so that it can't be pressed while loading
 			loadButton.disabled = true;
 			loadInput.disabled = true;
@@ -30,14 +36,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			reader.onload = function(event){
 				
 				// Create a worker for unzipping the file
-				var zipWorker = new Worker("js/unzip.js");
+				var zipWorker = new Worker("lib/unzip.js");
 				zipWorker.onmessage = function(message) {
 					
 					// Save the urls to localstorage
 					window.localStorage['caseFiles'] = message.data;
 					
 					// Redirect to the next page
-					document.location = "case.html";
+					document.location = "/case/";
 					
 				}
 				
