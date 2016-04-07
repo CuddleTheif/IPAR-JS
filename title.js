@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					window.localStorage['caseFiles'] = message.data;
 					
 					// Redirect to the next page
-					document.location = "/case/";
+					document.location = "case/";
 					
 				}
 				
