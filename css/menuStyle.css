@@ -33,6 +33,14 @@ button:disabled {
 	top: 15vh;
 }
 
+form{
+	text-align: left;
+}
+
+form input{
+	width: 100%;
+}
+
 #logo {
 	position: fixed;
 	top: 75vh;

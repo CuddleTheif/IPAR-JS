@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				// Get the case name and description from the xml
 				var curCase = getDoc(this.result).getElementsByTagName("case")[0];
 				document.getElementById("title").innerHTML = curCase.getAttribute("caseName")+document.getElementById("title").innerHTML;
+				document.title = document.getElementById("title").innerHTML;
 				document.getElementById("description").innerHTML = curCase.getAttribute("description");
 			   
 			};
@@ -68,6 +69,7 @@ function displayCase(xml){
 	// Get the case name and description from the xml
 	var curCase = xmlDoc.getElementsByTagName("case")[0];
 	document.getElementById("title").innerHTML = curCase.getAttribute("caseName");
+	document.title = curCase.getAttribute("caseName");
 	document.getElementById("description").innerHTML = curCase.getAttribute("description");
 	
 }
@@ -96,12 +98,12 @@ function back(){
 // Create new case session
 function start(){
 	if(caseStatus=='0')
-		document.location = "../profile/";
-	else if(confrim('Are you sure you want to start a new case? When you download this case you will no longer have any of your old data!'))
-		document.location = "../profile/";
+		document.location = "../profile/?new=true";
+	else if(confirm('Are you sure you want to start a new case? When you save this case you will no longer have any of your old data!'))
+		document.location = "../profile/?new=true";
 }
 
 // Resume an old case session
 function resume(){
-	document.location = "../profile/";
+	document.location = "../profile/?new=false";
 }

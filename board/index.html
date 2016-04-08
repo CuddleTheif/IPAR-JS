@@ -2,14 +2,24 @@
 <html>
 	<head>
 		<title>IPAR</title>
-		<style>
-			body { background-color:black; overflow: hidden; margin: 0; padding:0;}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/boardStyle.css">
 		<meta charset="utf-8">
 		<script type="text/javascript" src="../lib/konva.min.js"></script>
+		<script type="text/javascript" src="question.js"></script>
 		<script type="text/javascript" src="board.js"></script>
 	</head>
 	<body>
-		<div id="board"></div>
+		<div id="content">
+			<div id="board"></div>
+			<div id="button-bar" class="center">
+				<div id="board-buttons">
+				</div>
+				<div id="command-buttons">
+					<button onclick="save()"><img src="../img/iconSave.png" class="icon"/></button>
+					<button onclick="exit()"><img src="../img/iconExit.png" class="icon"/></button>
+				</div>
+			</div>
+		</div>
+		<div id="window"></div>
 	</body>
 </html>
