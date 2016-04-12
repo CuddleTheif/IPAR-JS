@@ -20,7 +20,7 @@ body {
 	background-color: #15708E;
 }
 
-#board-buttons button:focus {
+#board-buttons button.cur-case {
 	background-color: #0B4D6A;
 }
 
@@ -56,7 +56,6 @@ button {
   position: fixed;
   width: 30vw;
   min-width: 50vh;
-  z-Index: 999;
 }
 
 .windowContent {
@@ -134,18 +133,19 @@ button {
 }
 
 .windowContent button.wrong:disabled {
-  border-color: red;
+  border-color: #FF0000;
 }
 
 .windowContent button.correct:disabled {
-  border-color: green;
+  border-color: #00FF00;
 }
 
 .windowContent textarea {
-  height: 50%;
+  height: 80%;
   width: 80%;
   margin: 2% 10%;
   resize: none;
+  min-height: 20vh;
 }
 
 .windowContent button.submit {
@@ -155,4 +155,20 @@ button {
 
 .windowContent button.submit:disabled {
   background-color: #FFFFFF;
+}
+
+.exit-button {
+  position: fixed;
+  cursor: pointer;
+  top: 5vh;
+  height: 5vh;
+}
+
+.exit-button:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.feedbackI {
+  color: grey;
+  margin-left: 10px;
 }
