@@ -30,7 +30,27 @@ var Question = function(xml, save, category, onCorrect){
         }
 	});
   this.button.hide();
-    
+  
+  // Determine the question type and create the apporiate windows
+	this.questionType = parseInt(this.xml.getAttribute("questionType"));
+	if(this.questionType!=5){
+		this.createTaskWindow();
+		this.createResourceWindow();
+	}
+	switch(this.questionType){
+		case 5:
+			this.createMessageWindow();
+			break;
+		case 4:
+			this.createFileWindow();
+			break;
+		case 3:
+		case 2:
+		case 1:
+			this.createAnswerWindow(this.questionType!==2, function(){question.updateSaveFeed(save);});
+			break;
+	}
+
   // Create the circle for this question
   this.circle = new Konva.Circle({
     x: questionSize/10,
@@ -77,11 +97,23 @@ var Question = function(xml, save, category, onCorrect){
     // Create the checkmark for this question but don't add it yet
     var checkImg = new Image();
     checkImg.onload = function() {
+      
       question.check = new Konva.Image({
         image: checkImg,
         x: question.button.imageWidth-checkImg.width/2,
         y: question.button.imageHeight-checkImg.height/2
       });
+
+      // Load the data from the save
+      if(save){
+        question.state = save.getAttribute("questionState");
+        question.updateState(true);
+        question.button.x(save.getAttribute("positionPercentX")/100*virtualSize.x+virtualSize.out);
+        question.button.y(save.getAttribute("positionPercentY")/100*virtualSize.y+virtualSize.out);
+        question.updateSaveFeed(save);
+        category.updateLines();
+      } 
+
     };
     checkImg.src = '../img/iconPostItCheck.png';
   
@@ -89,27 +121,7 @@ var Question = function(xml, save, category, onCorrect){
     question.addConnection();
 
   };
-  buttonImg.src = caseFiles["case\\"+xml.getAttribute("imageLink").replace(/\//g, '\\')];
-	
-	// Determine the question type and create the apporiate windows
-	this.questionType = parseInt(this.xml.getAttribute("questionType"));
-	if(this.questionType!=5){
-		this.createTaskWindow();
-		this.createResourceWindow();
-	}
-	switch(this.questionType){
-		case 5:
-			this.createMessageWindow();
-			break;
-		case 4:
-			this.createFileWindow();
-			break;
-		case 3:
-		case 2:
-		case 1:
-			this.createAnswerWindow(this.questionType!==2);
-			break;
-	}
+  buttonImg.src = caseFiles["case\\"+xml.getAttribute("imageLink").replace(/\//g, '\\')];	
 	
 }
 
@@ -129,6 +141,11 @@ Question.prototype.addConnection = function(line){
       this.button.getLayer().draw();
   }
 
+}
+
+Question.prototype.updateLines = function(){
+  for(var i=0;i<this.lines.length;i++)
+    this.lines[i].update();
 }
 
 Question.prototype.wrongAnswer = function(num){
@@ -170,13 +187,27 @@ Question.prototype.correctAnswer = function(){
 			this.feedback.innerHTML += '<span class="feedbackI">'+this.fileInput.files[i].name+'</span><br/>';
 	}
   
-  if(((this.questionType===3 || this.questionType===1) && this.justification.value != '') ||
+  if(this.state!="correct" && 
+     (((this.questionType===3 || this.questionType===1) && this.justification.value != '') ||
       (this.questionType===4 && this.fileInput.files.length>0) ||
-       this.questionType===2){ 
+       this.questionType===2)){ 
     // Set the state of the question to correct
     this.newState = "correct";
   }
 	
+}
+
+Question.prototype.updateSaveFeed = function(save){
+  if(this.loadedSave){
+    if(this.justification && save){
+      this.justification.value = save.getAttribute("justification");
+      this.justification.submit.disabled = false;
+    }
+    if(this.state=="correct")
+      this.correctAnswer();
+  }
+  else
+    this.loadedSave = true;
 }
 
 Question.prototype.displayWindows = function(){
@@ -205,15 +236,20 @@ Question.prototype.hideWindows = function(){
   hideWindows();
   if(this.newState != this.state){
     this.state = this.newState;
-    if(this.state == "correct"){
-      this.circle.fill('red');
-      this.circle.stroke('#00FF00');
-      this.button.add(this.check);
-      this.button.getLayer().draw();
-      this.onCorrect();
-    }
+    this.updateState();
   }
   curCategory.button.focus();
+}
+
+Question.prototype.updateState = function(){
+  if(this.state == "correct"){
+    this.circle.fill('red');
+    this.circle.stroke('#00FF00');
+    this.button.add(this.check);
+    if(this.button.getLayer())
+      this.button.getLayer().draw();
+    this.onCorrect();
+  }
 }
 
 function hideWindows(){
@@ -298,7 +334,7 @@ Question.prototype.createResourceWindow = function(){
 	request.send();
 }
 
-Question.prototype.createAnswerWindow = function(text){
+Question.prototype.createAnswerWindow = function(text, callback){
 	
 	// Get the template for answer windows
 	var question = this;
@@ -317,18 +353,18 @@ Question.prototype.createAnswerWindow = function(text){
 	        var submit;
 	        if(text){
 	        	question.justification = document.createElement("textarea");
-	        	submit = document.createElement("button");
-	        	submit.className = "submit";
-	        	submit.innerHTML = "Submit";
-	        	submit.disabled = true;
-            submit.onclick = function() {
+	        	question.justification.submit = document.createElement("button");
+	        	question.justification.submit.className = "submit";
+	        	question.justification.submit.innerHTML = "Submit";
+            question.justification.submit.disabled = true;
+            question.justification.submit.onclick = function() {
 	        		question.correctAnswer();
 	        	}
 	        	question.justification.addEventListener('input', function() {
 	        		if(question.justification.value.length > 0)
-	        			submit.disabled = false;
+	        			question.justification.submit.disabled = false;
 	        		else
-	        			submit.disabled = true;
+	        			question.justification.submit.disabled = true;
 	        	}, false);
 	        }
 	        
@@ -372,8 +408,12 @@ Question.prototype.createAnswerWindow = function(text){
             question.answer.getElementsByClassName("windowContent")[0].appendChild(answers[i]);
 	        if(text){
 	        	question.answer.getElementsByClassName("windowContent")[0].appendChild(question.justification);
-	        	question.answer.getElementsByClassName("windowContent")[0].appendChild(submit);
+	        	question.answer.getElementsByClassName("windowContent")[0].appendChild(question.justification.submit);
 	        }
+
+          // Call the callback
+          if(callback)
+            callback();
 	    }
 	}
 	request.open("GET", "answerWindow.html", true);

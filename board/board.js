@@ -208,10 +208,18 @@ var Category = function(title, xml, qIndex, qSave){
 
     });
 		this.layer.add(this.questions[i].button);
-	}
+  }
+
+  // Add the layer and hide it
   this.layer.hide();
   board.add(this.layer);
 
+}
+
+// Update the lines for the questions
+Category.prototype.updateLines = function(){ 
+  for(var i=0;i<this.questions.length;i++)
+    this.questions[i].updateLines();
 }
 
 // Checks if all the questions in the current category are done
@@ -240,12 +248,13 @@ var Line = function(question1, question2){
   this.line.hide();
 
   // Set the line to move and resize with the questions movement
-  var line = this;
-  var updateLine = function(){
-    line.line.points([question1.button.x()+questionSize/10, question1.button.y()+questionSize/10, question2.button.x()+questionSize/10, question2.button.y()+questionSize/10]);
-    line.line.getLayer().draw();
+  this.update = function(){
+    this.line.points([question1.button.x()+questionSize/10, question1.button.y()+questionSize/10, question2.button.x()+questionSize/10, question2.button.y()+questionSize/10]);
+    if(this.line.getLayer())
+      this.line.getLayer().draw();
   }
-  question1.button.on('dragmove', updateLine);
-  question2.button.on('dragmove', updateLine);
+  var line = this;
+  question1.button.on('dragmove', function(){line.update();});
+  question2.button.on('dragmove', function(){line.update();});
 
 }
