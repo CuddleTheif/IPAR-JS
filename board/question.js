@@ -83,7 +83,7 @@ var Question = function(xml, save, category, onCorrect){
         y: question.button.imageHeight-checkImg.height/2
       });
     };
-    checkImg.src = '/img/iconPostItCheck.png';
+    checkImg.src = '../img/iconPostItCheck.png';
   
     // Use add connection to display this question if it doesn't require any connections
     question.addConnection();
@@ -184,7 +184,7 @@ Question.prototype.displayWindows = function(){
 	hideWindows();
 	var windowNode = document.getElementById("window");
 	var exitButton = new Image();
-  exitButton.src = "/img/iconClose.png";
+  exitButton.src = "../img/iconClose.png";
   exitButton.className = "exit-button";
   var question = this;
   exitButton.onclick = function() { question.hideWindows(); };
