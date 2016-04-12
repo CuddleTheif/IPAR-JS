@@ -272,10 +272,10 @@ Question.prototype.createResourceWindow = function(){
 				    	// Get the html for each resource and then add the result to the window
 				    	var resourceHTML = '';
 					    for(var i=0;i<resources.length;i++){
-					    	//var curResource = request.responseText.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
-					    	//curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);
-					    	//curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerHTML)].link);
-					    	//resourceHTML += curResource;
+                var curResource = request2.responseText.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
+					    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);
+					    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerHTML)].link);
+					    	resourceHTML += curResource;
 					    }
 					  	question.resource.innerHTML = question.resource.innerHTML.replace("%resources%", resourceHTML);
 				        

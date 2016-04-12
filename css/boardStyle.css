@@ -75,7 +75,7 @@ button {
   min-height: 5vw;
   margin: 1vh 1vw;
   border: 1px solid #EEEEEE;
-  height: 10vh;
+  height: 5vh;
   padding: 1vh 1vw;
 }
 .resource img {
@@ -86,7 +86,7 @@ button {
 
 .resource div{
   margin-top: 1vh;
-  height: 5vh;
+  height: 2.5vh;
   min-height: 2vw;
   background-color: lightGrey;
 }

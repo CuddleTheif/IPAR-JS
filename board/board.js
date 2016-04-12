@@ -1,6 +1,6 @@
 window.resolveLocalFileSystemURL = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
-var board, categories, curCategory;
+var board, categories, curCategory, resourceFiles;
 var caseFiles, curCase, curSave;
 var virtualSize = {x:1200, y:750, out:30};
 
@@ -115,7 +115,13 @@ function setupBoard(){
 	}));
 	board.add(background);
 	
-	// Get the categories from the case
+	// First get the resources from the case
+  resourceFiles = [];
+  var resourceXmls = curCase.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
+  for(var i=0;i<resourceXmls.length;i++)
+    resourceFiles[i] = new Resource(resourceXmls[i]);
+
+  // Get the categories from the case
 	categories = [];
 	var catNames = curCase.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
 	var catFields = curCase.getElementsByTagName("category");
@@ -127,6 +133,7 @@ function setupBoard(){
   changeCategory(categories[0]);
 }
 
+// Change the category currently on the board
 function changeCategory(cat){
   if(curCategory!=null){
     curCategory.layer.hide();
@@ -136,6 +143,34 @@ function changeCategory(cat){
   curCategory.button.className = 'cur-case';
   curCategory.layer.show();
   board.draw();
+}
+
+// A resource used in questions
+var Resource = function(xml){
+  
+  // First get the icon
+  var type = parseInt(xml.getAttribute("type"));
+  switch(type){
+    case 0:
+      this.icon = '/img/iconResourceFile.png';
+      break;
+    case 1:
+      this.icon = '/img/iconResourceLink.png';
+      break;
+    default:
+      this.icon = '';
+      break;
+  }
+
+  // Next get the title
+  this.title = xml.getAttribute("text");
+
+  // Last get the link
+  if(type==1)
+    this.link = xml.getAttribute("link");
+  else
+    this.link = caseFiles['case\\assets\\files\\'+xml.getAttribute("link")];
+
 }
 
 // A Category on the board
